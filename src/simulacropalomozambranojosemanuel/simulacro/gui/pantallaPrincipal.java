@@ -7,6 +7,7 @@ package simulacropalomozambranojosemanuel.simulacro.gui;
 import java.awt.Image;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -39,19 +40,36 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         Image iconoImagen = icono.getImage();
         this.setIconImage(iconoImagen);
 
-        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel model = new DefaultTableModel() {
+        
+        
+        
+        public  Class getcolumnClass(int column){
+        if (column ==3){
+        return Double.class;
+        
+        }
+        return Object.class;
+        }
+        
+        
+        };
 
         String titulo[] = {"operación", "numero 1", "numero 2", "resultado "};
         model.setColumnIdentifiers(titulo);
         jTable1.setModel(model);
 
-        sorter = new TableRowSorter<>(jTable1.getModel());
-
+       sorter = new TableRowSorter<>(jTable1.getModel()); 
+        
+        sorter.setComparator(1, (o1, o2) -> {
+            Integer num1 = Integer.parseInt(o1.toString());
+            Integer num2 = Integer.parseInt(o2.toString());
+            return num1.compareTo(num2);
+        });
+        
+        sorter.setSortKeys(Arrays.asList(new RowSorter.SortKey(3, SortOrder.ASCENDING)));
         jTable1.setRowSorter(sorter);
-
-        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-
-        sortKeys.add(new RowSorter.SortKey(3, SortOrder.DESCENDING));
+        sorter.sort();
 
         DefaultComboBoxModel dcm = new DefaultComboBoxModel();
 
